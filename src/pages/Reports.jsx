@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReportCard from '../components/ReportCard';
 
 const Reports = () => {
@@ -113,7 +113,7 @@ const Reports = () => {
 
       {/* Reports Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {filteredReports.map((report, index) => (
             <motion.div
               key={report.candidateName}
