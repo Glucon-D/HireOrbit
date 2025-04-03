@@ -55,94 +55,76 @@ const Profile = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="bg-[#fffefb] rounded-lg p-6 shadow-sm">
+      {/* Enhanced Header */}
+      <motion.div 
+        className="bg-gradient-to-r from-[#ffd82d]/10 to-white rounded-2xl p-8 shadow-lg border border-[#ffd82d]/20"
+        animate={{ y: 0, opacity: 1 }}
+        initial={{ y: -20, opacity: 0 }}
+      >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Profile Settings
             </h1>
             <p className="text-gray-600">
               Manage your account settings and preferences
             </p>
           </div>
-          <Button
-            variant={isEditing ? "secondary" : "primary"}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => setIsEditing(!isEditing)}
+            className={`
+              px-6 py-2.5 rounded-xl font-medium transition-all duration-200
+              ${isEditing 
+                ? 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' 
+                : 'bg-[#ffd82d] text-gray-900 hover:bg-[#ffd82d]/90 shadow-md hover:shadow-lg'}
+            `}
           >
             {isEditing ? 'Cancel' : 'Edit Profile'}
-          </Button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Profile Form */}
+      {/* Enhanced Profile Form */}
       <motion.div
         initial={false}
-        animate={isEditing ? { scale: 1.02 } : { scale: 1 }}
-        className="bg-white rounded-lg shadow-sm p-6"
+        animate={isEditing ? { 
+          scale: 1.01,
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+        } : { 
+          scale: 1,
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+        }}
+        className="bg-white rounded-2xl p-8 border border-gray-100"
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Basic Info */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                disabled={!isEditing}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85] disabled:bg-gray-50 disabled:text-gray-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                disabled={!isEditing}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85] disabled:bg-gray-50 disabled:text-gray-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Company
-              </label>
-              <input
-                type="text"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                disabled={!isEditing}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85] disabled:bg-gray-50 disabled:text-gray-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Job Title
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                disabled={!isEditing}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85] disabled:bg-gray-50 disabled:text-gray-500"
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Form fields with enhanced styling */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              { name: 'name', label: 'Full Name', type: 'text' },
+              { name: 'email', label: 'Email Address', type: 'email' },
+              { name: 'company', label: 'Company', type: 'text' },
+              { name: 'title', label: 'Job Title', type: 'text' }
+            ].map(field => (
+              <div key={field.name} className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  {field.label}
+                </label>
+                <input
+                  type={field.type}
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  disabled={!isEditing}
+                  className="w-full px-4 py-3 rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] disabled:bg-gray-50/50 disabled:text-gray-500 transition-colors"
+                />
+              </div>
+            ))}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
               Bio
             </label>
             <textarea
@@ -151,16 +133,24 @@ const Profile = () => {
               value={formData.bio}
               onChange={handleChange}
               disabled={!isEditing}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85] disabled:bg-gray-50 disabled:text-gray-500"
+              className="w-full px-4 py-3 rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] disabled:bg-gray-50/50 disabled:text-gray-500 transition-colors"
             />
           </div>
 
+          {/* Enhanced Save Button */}
           {isEditing && (
-            <div className="flex justify-end space-x-4">
-              <Button type="submit">
+            <motion.div 
+              className="flex justify-end"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <button
+                type="submit"
+                className="px-8 py-3 rounded-xl bg-[#ffd82d] text-gray-900 font-medium hover:bg-[#ffd82d]/90 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+              >
                 Save Changes
-              </Button>
-            </div>
+              </button>
+            </motion.div>
           )}
         </form>
       </motion.div>
