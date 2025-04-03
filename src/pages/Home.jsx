@@ -42,29 +42,11 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="relative"
             >
-              <div className="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-300 p-4">
-                {/* Dashboard Mockup */}
-                <div className="absolute top-0 left-0 right-0 h-8 bg-gray-800/50 flex items-center px-4">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-4 gap-4 mt-12 p-4">
-                  <div className="col-span-1">
-                    <div className="h-8 bg-gray-700/50 rounded-lg mb-4"></div>
-                    <div className="h-24 bg-gray-700/50 rounded-lg"></div>
-                  </div>
-                  <div className="col-span-3 space-y-4">
-                    <div className="h-32 bg-[#ffd82d]/20 rounded-lg"></div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="h-24 bg-gray-700/50 rounded-lg"></div>
-                      <div className="h-24 bg-gray-700/50 rounded-lg"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <img 
+                src="https://img.freepik.com/free-vector/recruitment-manager-analyzing-candidates_74855-4565.jpg" 
+                alt="AI Recruitment Process" 
+                className="w-full h-auto rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
+              />
               {/* Decorative Elements */}
               <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-[#ffd82d]/30 rounded-full blur-xl"></div>
               <div className="absolute -top-6 -left-6 w-32 h-32 bg-[#ffd82d]/20 rounded-full blur-xl"></div>
@@ -146,15 +128,38 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center opacity-60">
-            {[...Array(4)].map((_, index) => (
+            {[
+              {
+                name: "Google",
+                logo: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+              },
+              {
+                name: "Microsoft",
+                logo: "https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE1Mu3b?ver=5c31"
+              },
+              {
+                name: "Amazon",
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png"
+              },
+              {
+                name: "Meta",
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Meta_Platforms_Inc._logo.svg/2560px-Meta_Platforms_Inc._logo.svg.png"
+              }
+            ].map((company, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="w-32 h-12 bg-gray-200 rounded-lg"
-              />
+                className="w-32"
+              >
+                <img 
+                  src={company.logo} 
+                  alt={company.name} 
+                  className="w-full h-auto object-contain"
+                />
+              </motion.div>
             ))}
           </div>
         </div>
