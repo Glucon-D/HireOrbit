@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { signup } from '../lib/appwrite';
 import Button from '../components/Button';
 
 const Signup = () => {
@@ -9,7 +10,7 @@ const Signup = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'recruiter' // or candidate
+    role: 'candidate' // Changed default to candidate
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -20,28 +21,18 @@ const Signup = () => {
     setIsLoading(true);
     setError('');
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
     try {
-      // Basic validation
-      if (!formData.fullName || !formData.email || !formData.password) {
-        throw new Error('Please fill in all required fields');
-      }
       if (formData.password !== formData.confirmPassword) {
         throw new Error('Passwords do not match');
       }
-      if (formData.password.length < 6) {
-        throw new Error('Password must be at least 6 characters long');
-      }
-
-      // Store dummy user data
-      localStorage.setItem('user', JSON.stringify({
-        name: formData.fullName,
-        email: formData.email,
-        role: formData.role
-      }));
-
+      
+      const { user } = await signup(
+        formData.email, 
+        formData.password,
+        formData.fullName
+      );
+      
+      localStorage.setItem('user', JSON.stringify(user));
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
@@ -130,16 +121,23 @@ const Signup = () => {
               <label htmlFor="role" className="block text-sm font-semibold text-gray-900">
                 I am a
               </label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="block w-full px-4 py-3.5 rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors text-base"
-              >
-                <option value="recruiter">Recruiter</option>
-                <option value="candidate">Candidate</option>
-              </select>
+              <div className="space-y-2">
+                <select
+                  id="role"
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3.5 rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors text-base"
+                >
+                  <option value="candidate">Job Seeker</option>
+                  <option value="recruiter" disabled>Recruiter (Coming Soon)</option>
+                </select>
+                {formData.role === 'recruiter' && (
+                  <p className="text-sm text-yellow-600 bg-yellow-50 p-2 rounded-lg">
+                    🚀 Recruiter accounts are coming soon! For now, you can sign up as a job seeker.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 

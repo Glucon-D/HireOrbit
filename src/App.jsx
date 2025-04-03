@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { getCurrentUser } from './lib/appwrite';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
@@ -8,12 +9,26 @@ import './App.css';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem('user');
-  
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const user = await getCurrentUser();
+      setIsAuthenticated(!!user);
+      setIsLoading(false);
+    };
+    checkAuth();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Add a proper loading component
+  }
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return children;
 };
 

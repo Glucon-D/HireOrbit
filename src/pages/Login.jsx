@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { login } from '../lib/appwrite';
 import Button from '../components/Button';
 
 const Login = () => {
@@ -17,21 +18,9 @@ const Login = () => {
     setIsLoading(true);
     setError('');
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
     try {
-      // Dummy validation
-      if (!formData.email || !formData.password) {
-        throw new Error('Please fill in all fields');
-      }
-
-      // Store dummy user data
-      localStorage.setItem('user', JSON.stringify({
-        name: 'Test User',
-        email: formData.email
-      }));
-
+      const { user } = await login(formData.email, formData.password);
+      localStorage.setItem('user', JSON.stringify(user));
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);

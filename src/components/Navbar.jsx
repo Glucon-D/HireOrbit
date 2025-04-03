@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { logout } from '../lib/appwrite';
 import Button from './Button';
 
 const Navbar = ({ onMenuClick }) => {
@@ -20,10 +21,15 @@ const Navbar = ({ onMenuClick }) => {
     }
   }, [location]); // Re-run when route changes
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.removeItem('user');
+      setUser(null);
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   // Close dropdown when clicking outside
