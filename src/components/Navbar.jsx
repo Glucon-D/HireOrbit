@@ -51,9 +51,24 @@ const Navbar = ({ onMenuClick }) => {
             )}
             <Link to="/" className="flex items-center">
               <motion.div 
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-3"
                 whileHover={{ scale: 1.02 }}
               >
+                <motion.div
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, ease: "easeInOut" }}
+                  className="text-[#ffd82d]"
+                >
+                  {/* New Job-related SVG Icon */}
+                  <svg 
+                    className="w-8 h-8" 
+                    viewBox="0 0 24 24" 
+                    fill="currentColor"
+                  >
+                    <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+                  </svg>
+                </motion.div>
                 <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                   Hire<span className="text-[#ffd82d]">Orbit</span>
                 </span>
