@@ -58,25 +58,33 @@ const App = () => {
       <Navbar
         onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
         user={user}
+        className="fixed top-0 left-0 right-0 z-50 bg-white"
       />
       
-      <div className="flex">
+      <div className="flex h-screen pt-16"> {/* Make this container full height */}
         {isProtectedRoute && (
-          <Sidebar
-            isOpen={isSidebarOpen}
-            onClose={() => window.innerWidth < 768 && setIsSidebarOpen(false)}
+          <aside 
             className={`
-              fixed md:static
-              inset-y-0 left-0
-              transform transition-transform duration-300
+              fixed top-16 left-0 bottom-0
+              w-64
+              bg-white shadow-lg
+              overflow-y-auto
+              transition-transform duration-300 ease-in-out
+              z-40
               ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
             `}
-          />
+          >
+            <Sidebar
+              isOpen={isSidebarOpen}
+              onClose={() => window.innerWidth < 768 && setIsSidebarOpen(false)}
+            />
+          </aside>
         )}
         
         <main 
           className={`
-            flex-1 transition-all duration-300
+            flex-1
+            overflow-y-auto
             ${isProtectedRoute ? 'md:ml-64' : ''}
             w-full
           `}
