@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t border-gray-100 py-4 mt-auto">
-      <div className="container mx-auto px-4">
+    <footer className="w-full bg-white border-t border-gray-100 py-4 mt-auto">
+      <div className="max-w-[2000px] mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center space-x-6">
             <Link to="/" className="text-xl font-bold text-gray-900">
