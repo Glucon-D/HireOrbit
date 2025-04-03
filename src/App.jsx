@@ -3,6 +3,7 @@ import { Outlet, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import Footer from './components/Footer';
 import './App.css';
 
 // Protected Route Wrapper
@@ -54,14 +55,14 @@ const App = () => {
   ].some(route => location.pathname.startsWith(route));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar
         onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
         user={user}
         className="fixed top-0 left-0 right-0 z-50 bg-white"
       />
       
-      <div className="flex h-screen pt-16"> {/* Make this container full height */}
+      <div className="flex flex-1 h-full pt-16">
         {isProtectedRoute && (
           <aside 
             className={`
@@ -87,13 +88,15 @@ const App = () => {
             overflow-y-auto
             ${isProtectedRoute ? 'md:ml-64' : ''}
             w-full
+            flex flex-col
           `}
         >
-          <div className="container mx-auto px-4 py-8">
+          <div className="flex-1 container mx-auto px-4 py-8">
             <AnimatePresence mode="wait">
               <Outlet />
             </AnimatePresence>
           </div>
+          <Footer />
         </main>
       </div>
     </div>

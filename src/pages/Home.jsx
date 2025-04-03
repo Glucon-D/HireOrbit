@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '../components/Button';
-import Footer from '../components/Footer';
 
 const Home = () => {
   return (
@@ -180,8 +179,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };
