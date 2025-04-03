@@ -6,26 +6,17 @@ import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import './App.css';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const user = await getCurrentUser();
-      setIsAuthenticated(!!user);
-      setIsLoading(false);
-    };
-    checkAuth();
-  }, []);
-
-  if (isLoading) {
+  if (loading) {
     return <div>Loading...</div>; // Add a proper loading component
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
@@ -70,51 +61,53 @@ const App = () => {
   ].some(route => location.pathname.startsWith(route));
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar
-        onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        user={user}
-        className="fixed top-0 left-0 right-0 z-50 bg-white"
-      />
-      
-      <div className="flex flex-1 h-full pt-16">
-        {isProtectedRoute && (
-          <aside 
+    <AuthProvider>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Navbar
+          onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          user={user}
+          className="fixed top-0 left-0 right-0 z-50 bg-white"
+        />
+        
+        <div className="flex flex-1 h-full pt-16">
+          {isProtectedRoute && (
+            <aside 
+              className={`
+                fixed top-16 left-0 bottom-0
+                w-64
+                bg-white shadow-lg
+                overflow-y-auto
+                transition-transform duration-300 ease-in-out
+                z-40
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+              `}
+            >
+              <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={() => window.innerWidth < 768 && setIsSidebarOpen(false)}
+              />
+            </aside>
+          )}
+          
+          <main 
             className={`
-              fixed top-16 left-0 bottom-0
-              w-64
-              bg-white shadow-lg
+              flex-1
               overflow-y-auto
-              transition-transform duration-300 ease-in-out
-              z-40
-              ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+              ${isProtectedRoute ? 'md:ml-64' : ''}
+              w-full
+              flex flex-col
             `}
           >
-            <Sidebar
-              isOpen={isSidebarOpen}
-              onClose={() => window.innerWidth < 768 && setIsSidebarOpen(false)}
-            />
-          </aside>
-        )}
-        
-        <main 
-          className={`
-            flex-1
-            overflow-y-auto
-            ${isProtectedRoute ? 'md:ml-64' : ''}
-            w-full
-            flex flex-col
-          `}
-        >
-          <div className="flex-1 container mx-auto px-4 py-8">
-            <AnimatePresence mode="wait">
-              <Outlet />
-            </AnimatePresence>
-          </div>
-          <Footer />
-        </main>
+            <div className="flex-1 container mx-auto px-4 py-8">
+              <AnimatePresence mode="wait">
+                <Outlet />
+              </AnimatePresence>
+            </div>
+            <Footer />
+          </main>
+        </div>
       </div>
-    </div>
+    </AuthProvider>
   );
 };
 

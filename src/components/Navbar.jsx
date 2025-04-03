@@ -3,9 +3,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { logout } from '../lib/appwrite';
 import Button from './Button';
+import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = ({ onMenuClick }) => {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -24,8 +25,8 @@ const Navbar = ({ onMenuClick }) => {
   const handleLogout = async () => {
     try {
       await logout();
-      localStorage.removeItem('user');
       setUser(null);
+      localStorage.removeItem('user');
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
