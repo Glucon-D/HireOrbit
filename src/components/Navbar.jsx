@@ -38,11 +38,11 @@ const Navbar = ({ onMenuClick }) => {
     <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center space-x-4">
             {user && (
               <button 
                 onClick={onMenuClick}
-                className="p-2 rounded-md text-gray-700 hover:bg-gray-100 lg:hidden"
+                className="p-2 rounded-md text-gray-500 hover:bg-[#ffd82d]/10 hover:text-gray-900 transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -50,17 +50,19 @@ const Navbar = ({ onMenuClick }) => {
               </button>
             )}
             <Link to="/" className="flex items-center">
-              <motion.span 
-                className="text-2xl font-bold text-gray-900"
-                whileHover={{ scale: 1.05 }}
+              <motion.div 
+                className="flex items-center space-x-2"
+                whileHover={{ scale: 1.02 }}
               >
-                Hire<span className="text-[#ffd82d]">Orbit</span>
-              </motion.span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                  Hire<span className="text-[#ffd82d]">Orbit</span>
+                </span>
+              </motion.div>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden sm:flex sm:items-center sm:space-x-4">
+          <div className="hidden sm:flex sm:items-center sm:space-x-6">
             {user ? (
               <div className="relative" ref={dropdownRef}>
                 <button
@@ -103,14 +105,24 @@ const Navbar = ({ onMenuClick }) => {
                 )}
               </div>
             ) : (
-              <>
+              <div className="flex items-center space-x-4">
                 <Link to="/login">
-                  <Button variant="secondary" className="hover:bg-[#ffd82d]/10">Login</Button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    className="px-6 py-2 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-[#ffd82d]/10 transition-colors duration-200"
+                  >
+                    Login
+                  </motion.button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="bg-[#ffd82d] hover:bg-[#ffd82d]/90 text-gray-900">Sign Up</Button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    className="px-6 py-2 rounded-lg bg-[#ffd82d] text-gray-900 font-medium hover:bg-[#ffd82d]/90 shadow-md hover:shadow-lg transition-all duration-200"
+                  >
+                    Sign Up
+                  </motion.button>
                 </Link>
-              </>
+              </div>
             )}
           </div>
 
@@ -118,7 +130,7 @@ const Navbar = ({ onMenuClick }) => {
           <div className="flex items-center sm:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md text-gray-700 hover:bg-gray-100"
+              className="p-2 rounded-md text-gray-500 hover:bg-[#ffd82d]/10 hover:text-gray-900 transition-colors"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path 
@@ -133,14 +145,14 @@ const Navbar = ({ onMenuClick }) => {
         </div>
       </div>
 
-      {/* Mobile Menu with enhanced styling */}
+      {/* Mobile Menu */}
       <motion.div 
         className={`sm:hidden shadow-lg border-t border-gray-100 ${isMobileMenuOpen ? 'block' : 'hidden'}`}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
       >
-        <div className="px-2 pt-2 pb-3 space-y-1 bg-white">
+        <div className="px-4 pt-2 pb-3 space-y-2 bg-white">
           {user ? (
             <>
               <div className="px-3 py-2 border-b border-gray-100 mb-2">
@@ -173,20 +185,20 @@ const Navbar = ({ onMenuClick }) => {
               </button>
             </>
           ) : (
-            <>
+            <div className="grid gap-2">
               <Link 
                 to="/login" 
-                className="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-[#ffd82d]/10"
+                className="block px-4 py-2 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-[#ffd82d]/10 transition-colors"
               >
                 Login
               </Link>
               <Link 
                 to="/signup" 
-                className="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-[#ffd82d]/10"
+                className="block px-4 py-2 rounded-lg bg-[#ffd82d] text-gray-900 font-medium text-center hover:bg-[#ffd82d]/90 shadow-md"
               >
                 Sign Up
               </Link>
-            </>
+            </div>
           )}
         </div>
       </motion.div>

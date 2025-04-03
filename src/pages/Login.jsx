@@ -49,19 +49,33 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fffefb] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-[#ffd82d]/5 to-white py-12 px-4 sm:px-6 lg:px-8">
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#ffd82d]/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#ffd82d]/10 rounded-full blur-3xl"></div>
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-sm"
+        className="max-w-md w-full space-y-8 bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-xl relative"
       >
         <div>
-          <h2 className="text-center text-3xl font-bold text-gray-900">
+          <Link to="/" className="block text-center mb-8">
+            <motion.span 
+              className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent"
+              whileHover={{ scale: 1.02 }}
+            >
+              Hire<span className="text-[#ffd82d]">Orbit</span>
+            </motion.span>
+          </Link>
+          <h2 className="text-center text-3xl font-bold text-gray-900 mb-2">
             Welcome back
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-gray-600">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-[#ffeb85] hover:text-[#ffeb85]/80">
+            <Link to="/signup" className="text-gray-900 hover:text-[#ffd82d] transition-colors">
               Sign up
             </Link>
           </p>
@@ -78,7 +92,7 @@ const Login = () => {
         )}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
@@ -91,7 +105,8 @@ const Login = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85]"
+                className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors"
+                placeholder="you@example.com"
               />
             </div>
 
@@ -107,7 +122,8 @@ const Login = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85]"
+                className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors"
+                placeholder="••••••••"
               />
             </div>
           </div>
@@ -118,16 +134,16 @@ const Login = () => {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-[#ffeb85] focus:ring-[#ffeb85]"
+                className="h-4 w-4 rounded border-gray-300 text-[#ffd82d] focus:ring-[#ffd82d]"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <a href="#" className="text-[#ffeb85] hover:text-[#ffeb85]/80">
-                Forgot your password?
+              <a href="#" className="font-medium text-gray-900 hover:text-[#ffd82d] transition-colors">
+                Forgot password?
               </a>
             </div>
           </div>
@@ -136,8 +152,9 @@ const Login = () => {
             type="submit"
             isFullWidth
             isLoading={isLoading}
+            className="bg-[#ffd82d] hover:bg-[#ffd82d]/90 text-gray-900 font-medium py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
-            Sign in
+            {isLoading ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
       </motion.div>

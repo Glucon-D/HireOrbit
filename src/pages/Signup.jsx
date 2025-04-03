@@ -59,19 +59,33 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fffefb] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-[#ffd82d]/5 to-white py-12 px-4 sm:px-6 lg:px-8">
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#ffd82d]/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#ffd82d]/10 rounded-full blur-3xl"></div>
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-sm"
+        className="max-w-md w-full space-y-8 bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-xl relative"
       >
         <div>
-          <h2 className="text-center text-3xl font-bold text-gray-900">
+          <Link to="/" className="block text-center mb-8">
+            <motion.span 
+              className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent"
+              whileHover={{ scale: 1.02 }}
+            >
+              Hire<span className="text-[#ffd82d]">Orbit</span>
+            </motion.span>
+          </Link>
+          <h2 className="text-center text-3xl font-bold text-gray-900 mb-2">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link to="/login" className="text-[#ffeb85] hover:text-[#ffeb85]/80">
+            <Link to="/login" className="text-gray-900 hover:text-[#ffd82d] transition-colors">
               Sign in
             </Link>
           </p>
@@ -88,70 +102,27 @@ const Signup = () => {
         )}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <input
-                id="fullName"
-                name="fullName"
-                type="text"
-                required
-                value={formData.fullName}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85]"
-              />
-            </div>
+          <div className="grid gap-5">
+            {['fullName', 'email', 'password', 'confirmPassword'].map(field => (
+              <div key={field}>
+                <label htmlFor={field} className="block text-sm font-medium text-gray-700 mb-1">
+                  {field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
+                </label>
+                <input
+                  id={field}
+                  name={field}
+                  type={field.includes('password') ? 'password' : field === 'email' ? 'email' : 'text'}
+                  required
+                  value={formData[field]}
+                  onChange={handleChange}
+                  className="block w-full rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors"
+                  placeholder={field.includes('password') ? '••••••••' : ''}
+                />
+              </div>
+            ))}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85]"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85]"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85]"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
                 I am a
               </label>
               <select
@@ -159,7 +130,7 @@ const Signup = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffeb85] focus:ring-[#ffeb85]"
+                className="block w-full rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors"
               >
                 <option value="recruiter">Recruiter</option>
                 <option value="candidate">Candidate</option>
@@ -167,21 +138,23 @@ const Signup = () => {
             </div>
           </div>
 
-          <div className="flex items-center">
-            <input
-              id="terms"
-              name="terms"
-              type="checkbox"
-              required
-              className="h-4 w-4 rounded border-gray-300 text-[#ffeb85] focus:ring-[#ffeb85]"
-            />
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
+          <div className="flex items-start">
+            <div className="flex items-center h-5">
+              <input
+                id="terms"
+                name="terms"
+                type="checkbox"
+                required
+                className="h-4 w-4 rounded border-gray-300 text-[#ffd82d] focus:ring-[#ffd82d]"
+              />
+            </div>
+            <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
               I agree to the{' '}
-              <a href="#" className="text-[#ffeb85] hover:text-[#ffeb85]/80">
+              <a href="#" className="text-gray-900 hover:text-[#ffd82d] transition-colors">
                 Terms of Service
               </a>
               {' '}and{' '}
-              <a href="#" className="text-[#ffeb85] hover:text-[#ffeb85]/80">
+              <a href="#" className="text-gray-900 hover:text-[#ffd82d] transition-colors">
                 Privacy Policy
               </a>
             </label>
@@ -191,8 +164,9 @@ const Signup = () => {
             type="submit"
             isFullWidth
             isLoading={isLoading}
+            className="bg-[#ffd82d] hover:bg-[#ffd82d]/90 text-gray-900 font-medium py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
-            Create Account
+            {isLoading ? 'Creating account...' : 'Create Account'}
           </Button>
         </form>
       </motion.div>
