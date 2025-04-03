@@ -69,7 +69,7 @@ const Signup = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full space-y-8 bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-xl relative"
+        className="max-w-md w-full space-y-10 bg-white/80 backdrop-blur-sm p-10 rounded-2xl shadow-xl relative"
       >
         <div>
           <Link to="/" className="block text-center mb-8">
@@ -101,28 +101,33 @@ const Signup = () => {
           </motion.div>
         )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="grid gap-5">
-            {['fullName', 'email', 'password', 'confirmPassword'].map(field => (
-              <div key={field}>
-                <label htmlFor={field} className="block text-sm font-medium text-gray-700 mb-1">
-                  {field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
+        <form className="mt-8 space-y-8" onSubmit={handleSubmit}>
+          <div className="grid gap-6">
+            {[
+              { name: 'fullName', label: 'Full Name', type: 'text', placeholder: 'John Doe' },
+              { name: 'email', label: 'Email address', type: 'email', placeholder: 'you@example.com' },
+              { name: 'password', label: 'Password', type: 'password', placeholder: '••••••••' },
+              { name: 'confirmPassword', label: 'Confirm Password', type: 'password', placeholder: '••••••••' }
+            ].map(field => (
+              <div key={field.name} className="space-y-4">
+                <label htmlFor={field.name} className="block text-sm font-semibold text-gray-900">
+                  {field.label}
                 </label>
                 <input
-                  id={field}
-                  name={field}
-                  type={field.includes('password') ? 'password' : field === 'email' ? 'email' : 'text'}
+                  id={field.name}
+                  name={field.name}
+                  type={field.type}
                   required
-                  value={formData[field]}
+                  value={formData[field.name]}
                   onChange={handleChange}
-                  className="block w-full rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors"
-                  placeholder={field.includes('password') ? '••••••••' : ''}
+                  className="block w-full px-4 py-3.5 rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors text-base"
+                  placeholder={field.placeholder}
                 />
               </div>
             ))}
 
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="space-y-4">
+              <label htmlFor="role" className="block text-sm font-semibold text-gray-900">
                 I am a
               </label>
               <select
@@ -130,7 +135,7 @@ const Signup = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="block w-full rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors"
+                className="block w-full px-4 py-3.5 rounded-xl border-gray-200 shadow-sm focus:border-[#ffd82d] focus:ring-[#ffd82d] transition-colors text-base"
               >
                 <option value="recruiter">Recruiter</option>
                 <option value="candidate">Candidate</option>
@@ -138,7 +143,7 @@ const Signup = () => {
             </div>
           </div>
 
-          <div className="flex items-start">
+          <div className="flex items-start py-2">
             <div className="flex items-center h-5">
               <input
                 id="terms"
@@ -150,24 +155,39 @@ const Signup = () => {
             </div>
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
               I agree to the{' '}
-              <a href="#" className="text-gray-900 hover:text-[#ffd82d] transition-colors">
-                Terms of Service
-              </a>
+              <a href="#" className="font-medium text-gray-900 hover:text-[#ffd82d] transition-colors">Terms</a>
               {' '}and{' '}
-              <a href="#" className="text-gray-900 hover:text-[#ffd82d] transition-colors">
-                Privacy Policy
-              </a>
+              <a href="#" className="font-medium text-gray-900 hover:text-[#ffd82d] transition-colors">Privacy Policy</a>
             </label>
           </div>
 
-          <Button
+          <motion.button
             type="submit"
-            isFullWidth
-            isLoading={isLoading}
-            className="bg-[#ffd82d] hover:bg-[#ffd82d]/90 text-gray-900 font-medium py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            className={`
+              relative w-full py-4 px-6 rounded-xl
+              bg-gradient-to-r from-[#ffd82d] to-[#ffcf2d]
+              text-gray-900 font-semibold text-base
+              shadow-lg hover:shadow-xl
+              transition-all duration-200
+              flex items-center justify-center
+              ${isLoading ? 'opacity-90 cursor-not-allowed' : 'hover:to-[#ffd82d]'}
+            `}
+            disabled={isLoading}
           >
-            {isLoading ? 'Creating account...' : 'Create Account'}
-          </Button>
+            {isLoading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Creating account...
+              </>
+            ) : (
+              'Create Account'
+            )}
+          </motion.button>
         </form>
       </motion.div>
     </div>
