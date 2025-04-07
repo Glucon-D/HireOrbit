@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import JobList from '../components/JobList';
 import UserInfoCard from '../components/UserInfoCard';
 
-const CACHE_DURATION = 1000 * 60 * 15; // 15 minutes cache
+const CACHE_DURATION = 1000 * 60 * 60 * 24; // 24 hours cache
+const MONTHLY_LIMIT = 500;
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -30,6 +31,13 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
+        // Check API calls limit
+        const today = new Date();
+        const monthKey = `${today.getFullYear()}-${today.getMonth()}`;
+        const apiCallsData = localStorage.getItem('apiCallsCount');
+        const apiCalls = apiCallsData ? JSON.parse(apiCallsData) : {};
+        const monthlyCallCount = apiCalls[monthKey] || 0;
+
         // Check cache first
         const cachedData = localStorage.getItem('jobsCache');
         if (cachedData) {
@@ -43,13 +51,28 @@ const Dashboard = () => {
           }
         }
 
-        // Fetch new data if cache is missing or expired
+        // Check if we're near the API limit
+        if (monthlyCallCount >= MONTHLY_LIMIT * 0.9) {
+          setError('Monthly API limit nearly reached. Some features may be limited.');
+          if (cachedData) {
+            const { jobs: cachedJobs } = JSON.parse(cachedData);
+            setJobs(cachedJobs);
+            setIsLoading(false);
+            return;
+          }
+        }
+
+        // Make API call if within limits
         const appId = import.meta.env.VITE_ADZUNA_APP_ID;
         const apiKey = import.meta.env.VITE_ADZUNA_API_KEY;
         const response = await fetch(
-          `https://api.adzuna.com/v1/api/jobs/in/search/1?app_id=${appId}&app_key=${apiKey}&results_per_page=10&content-type=application/json`
+          `https://api.adzuna.com/v1/api/jobs/in/search/1?app_id=${appId}&app_key=${apiKey}&results_per_page=6&content-type=application/json`
         );
         const data = await response.json();
+
+        // Update API call counter
+        apiCalls[monthKey] = monthlyCallCount + 1;
+        localStorage.setItem('apiCallsCount', JSON.stringify(apiCalls));
         
         const transformedJobs = data.results.map(job => ({
           id: job.id,
@@ -65,10 +88,11 @@ const Dashboard = () => {
           postedDate: new Date(job.created).toISOString().split('T')[0]
         }));
 
-        // Store in cache with timestamp
+        // Store in cache with longer duration
         localStorage.setItem('jobsCache', JSON.stringify({
           timestamp: Date.now(),
-          jobs: transformedJobs
+          jobs: transformedJobs,
+          totalResults: data.count
         }));
 
         setJobs(transformedJobs);
@@ -78,7 +102,7 @@ const Dashboard = () => {
         setError('Failed to fetch jobs');
         setIsLoading(false);
         
-        // Try to use expired cache as fallback
+        // Use cached data as fallback
         const cachedData = localStorage.getItem('jobsCache');
         if (cachedData) {
           const { jobs: cachedJobs } = JSON.parse(cachedData);
@@ -105,12 +129,32 @@ const Dashboard = () => {
     };
   }, []);
 
+  // Display API calls remaining
+  const getRemainingCalls = () => {
+    const today = new Date();
+    const monthKey = `${today.getFullYear()}-${today.getMonth()}`;
+    const apiCallsData = localStorage.getItem('apiCallsCount');
+    const apiCalls = apiCallsData ? JSON.parse(apiCallsData) : {};
+    const monthlyCallCount = apiCalls[monthKey] || 0;
+    return MONTHLY_LIMIT - monthlyCallCount;
+  };
+
+  // Add remaining calls display
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="space-y-8"
     >
+      {/* Show API limit warning if needed */}
+      {getRemainingCalls() < MONTHLY_LIMIT * 0.1 && (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+          <p className="text-yellow-700">
+            API calls remaining this month: {getRemainingCalls()}
+          </p>
+        </div>
+      )}
+
       {/* Welcome Section with User Info */}
       {user && (
         <UserInfoCard
