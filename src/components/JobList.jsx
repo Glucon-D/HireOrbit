@@ -39,10 +39,11 @@ const JobList = ({ jobs, onSelect }) => {
         });
       case 'recent':
       default:
-        return jobs;
+        return [...jobs].sort((a, b) => 
+          new Date(b.postedDate) - new Date(a.postedDate)
+        );
     }
   };
-
   const filteredAndSortedJobs = sortJobs(filterJobs(jobs));
 
   const uniqueLocations = [...new Set(jobs.map(job => job.location))];
