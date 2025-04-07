@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { login } from '../lib/appwrite';
 import Button from '../components/Button';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
+  const { setUser } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -20,6 +22,7 @@ const Login = () => {
 
     try {
       const { user } = await login(formData.email, formData.password);
+      setUser(user); // Update auth context
       localStorage.setItem('user', JSON.stringify(user));
       navigate('/dashboard');
     } catch (err) {

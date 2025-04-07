@@ -3,9 +3,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { logout } from '../lib/appwrite';
 import Button from './Button';
+import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = ({ onMenuClick }) => {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -24,8 +25,8 @@ const Navbar = ({ onMenuClick }) => {
   const handleLogout = async () => {
     try {
       await logout();
-      localStorage.removeItem('user');
       setUser(null);
+      localStorage.removeItem('user');
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -44,8 +45,8 @@ const Navbar = ({ onMenuClick }) => {
   }, []);
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="w-full bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="max-w-[2000px] mx-auto px-4 sm:px-6">
         <div className="flex justify-between h-16">
           <div className="flex items-center space-x-4">
             {user && (

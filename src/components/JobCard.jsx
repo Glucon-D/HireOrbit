@@ -31,17 +31,17 @@ const JobCard = ({ job }) => {
 
       <div className="mt-4">
         <div className="flex items-center text-gray-600 text-sm">
-          <span className="mr-4">📍 {location}</span>
-          <span>💰 {salary}</span>
+          <span className="mr-4">📍 {location || 'Location not specified'}</span>
+          <span>💰 {salary || 'Salary not specified'}</span>
         </div>
       </div>
 
       <p className="mt-4 text-gray-600 text-sm line-clamp-2">
-        {description}
+        {description || 'No description available'}
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {skills.map((skill, index) => (
+        {(skills || []).map((skill, index) => (
           <span
             key={index}
             className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs"
